@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class Parser {
 
@@ -22,6 +23,9 @@ public class Parser {
     ArrayList<Line> metroLines = new ArrayList<>();
     private List<String> stationsNames = new ArrayList<>();
     TreeMap<String, List<String>> stations = new TreeMap<>();
+    List<TreeSet<Station>> connections = new ArrayList<>();
+    TreeSet<Station> bufer = new TreeSet<>();
+    boolean noMatches = true;
 
     public Parser(String path) {
         try {
@@ -76,11 +80,11 @@ public class Parser {
                     for (Element element : line.getElementsByTag("span")) {
                         if (!element.getElementsByTag("span").text().isEmpty()) {
                             if (element.text().charAt(0) == '0') {
-                                connectionsListTemp.add(stationTemp + " -> " + element.text().substring(1) + " = " +
+                                connectionsListTemp.add(stationTemp + " > " + element.text().substring(1) + " = " +
                                         element.nextElementSibling().attr("title").
                                                 substring(19));
                             } else {
-                                connectionsListTemp.add(stationTemp + " -> " + element.text() + " = " + element.nextElementSibling().attr("title").
+                                connectionsListTemp.add(stationTemp + " > " + element.text() + " = " + element.nextElementSibling().attr("title").
                                         substring(19));
                             }
                         }
@@ -120,8 +124,59 @@ public class Parser {
                 for (Station station : line.getStations()) {
                     stationsNames.add(station.getName());
                 }
-                stations.put(line.getNumber(), stationsNames);
+                stations.put(line.getNumber(), new ArrayList<>(stationsNames));
             }
+
+            for (String string : connectionsList) {
+//                bufer.clear();
+                for (Line line : metroLines) {
+                    if (string.substring(string.indexOf("=") + 1, string.lastIndexOf(">") - 1).trim().equals(line.getNumber())) {
+                        for (Station station : line.getStations()) {
+                            if (string.substring(0, string.indexOf("=") - 1).trim().equals(station.getName())) {
+                                if (!bufer.isEmpty()) {
+                                    for (Station stationInBufer : bufer) {
+                                        if (station.equals(stationInBufer)) {
+                                            for (Line connectedLine : metroLines) {
+                                                if (string.substring(string.indexOf(">") + 1, string.lastIndexOf("=") - 1).trim().equals(connectedLine.getNumber())) {
+                                                    for (Station connectedStation : connectedLine.getStations()) {
+                                                        if (string.substring(string.lastIndexOf("=") + 1).trim().equals(connectedStation.getName())) {
+                                                            bufer.add(connectedStation);
+                                                            connections.add(new TreeSet<>(bufer));
+                                                            noMatches = false;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            noMatches = true;
+                                        }
+                                    }
+                                }
+                                if (noMatches) {
+                                    bufer.clear();
+                                    bufer.add(station);
+                                    for (Line connectedLine : metroLines) {
+                                        if (string.substring(string.indexOf(">") + 1, string.lastIndexOf("=") - 1).trim().equals(connectedLine.getNumber())) {
+                                            for (Station connectedStation : connectedLine.getStations()) {
+                                                if (string.substring(string.lastIndexOf("=") + 1).trim().equals(connectedStation.getName())) {
+                                                    bufer.add(connectedStation);
+                                                    connections.add(new TreeSet<>(bufer));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+//            for (TreeSet<Station> treeSet : connections) {
+//                for (Station station : treeSet) {
+//
+//                }
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();

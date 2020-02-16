@@ -2,20 +2,22 @@ import com.google.gson.annotations.Expose;
 import core.Line;
 import core.Station;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public class ToJson {
-
-
     TreeMap<String, List<String>> stations;
+
     ArrayList<Line> lines;
 
-    public ToJson (ArrayList<Line> lines, TreeMap<String, List<String>> stations ){
-        this.lines = lines;
+    //    ArrayList<String> connectionsList;
+    List<TreeSet<Station>> connections;
+
+
+    public ToJson(ArrayList<Line> lines, TreeMap<String, List<String>> stations, List<TreeSet<Station>> connections) {
+
         this.stations = stations;
+        this.lines = lines;
+        this.connections = connections;
     }
 
     public TreeMap<String, List<String>> getStations() {

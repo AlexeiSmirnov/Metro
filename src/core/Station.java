@@ -4,18 +4,21 @@ import com.google.gson.annotations.Expose;
 
 public class Station implements Comparable<Station>
 {
-    private Line line;
+    private String line;
+    private transient Line line1;
     private String name;
 
-    public Station(String name, Line line)
+
+    public Station(String name, Line line1)
     {
         this.name = name;
-        this.line = line;
+        this.line1 = line1;
+        line = line1.getNumber();
     }
 
     public Line getLine()
     {
-        return line;
+        return line1;
     }
 
     public String getName()
@@ -26,7 +29,7 @@ public class Station implements Comparable<Station>
     @Override
     public int compareTo(Station station)
     {
-        int lineComparison = line.compareTo(station.getLine());
+        int lineComparison = line1.compareTo(station.getLine());
         if(lineComparison != 0) {
             return lineComparison;
         }
