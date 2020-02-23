@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="931272b5-f7d1-4e86-a08f-9c7c551e59f2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="931272b5-f7d1-4e86-a08f-9c7c551e59f2" name="Default Changelist" comment="second commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/map.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/map.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoscowMetro/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoscowMetro/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MoscowMetro/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoscowMetro/Parser.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MoscowMetro/ToJson.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoscowMetro/ToJson.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoscowMetro/core/Line.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoscowMetro/core/Line.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoscowMetro/core/Station.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoscowMetro/core/Station.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Parser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ToJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ToJson.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/Line.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Line.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/Station.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Station.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,7 +35,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="C:/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SPBMetro" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -79,6 +82,14 @@
       <option name="presentableId" value="Default" />
       <updated>1580796617408</updated>
     </task>
+    <task id="LOCAL-00001" summary="second commit">
+      <created>1581876540734</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1581876540735</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -86,22 +97,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="second commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="second commit" />
+  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Parser.java</url>
-          <line>131</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="((HashMap.Node)stations.entrySet().toArray()[0]).getValue()" custom="java.util.HashMap.Node" />

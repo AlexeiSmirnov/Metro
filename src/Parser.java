@@ -6,26 +6,24 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Parser {
 
-    ArrayList<String> stationsList = new ArrayList<>();
+    private ArrayList<String> stationsList = new ArrayList<>();
     private ArrayList<String> connectionsListTemp = new ArrayList<>();
-    ArrayList<String> connectionsList = new ArrayList<>();
+    private ArrayList<String> connectionsList = new ArrayList<>();
     private String lineTemp = null;
     private String stationTemp = null;
-    TreeMap<String, String> linesMap = new TreeMap();
-    TreeMap<String, String> colorMap = new TreeMap();
+    private TreeMap<String, String> linesMap = new TreeMap();
+    private TreeMap<String, String> colorMap = new TreeMap();
     ArrayList<Line> metroLines = new ArrayList<>();
     private List<String> stationsNames = new ArrayList<>();
     TreeMap<String, List<String>> stations = new TreeMap<>();
-    List<TreeSet<Station>> connections = new ArrayList<>();
-    TreeSet<Station> bufer = new TreeSet<>();
-    boolean noMatches = true;
+    private List<HashSet<Station>> connectionsTemp = new ArrayList<>();
+    private HashSet<Station> bufer = new HashSet<>();
+    HashSet<HashSet<Station>> connections;
+
 
     public Parser(String path) {
         try {
@@ -76,14 +74,24 @@ public class Parser {
                     }
                 }
 
-                if (line.getElementsByTag("a").attr("title").contains("Переход")) {
+                if (line.getElementsByTag("a").attr("title").contains("Переход") ||
+                        line.getElementsByTag("a").attr("title").contains("Кросс-платформенная")) {
                     for (Element element : line.getElementsByTag("span")) {
                         if (!element.getElementsByTag("span").text().isEmpty()) {
                             if (element.text().charAt(0) == '0') {
+                                if (line.getElementsByTag("a").attr("title").contains("Кросс-платформенная")) {
+                                    connectionsListTemp.add(stationTemp + " > " + element.text().substring(1) + " = " +
+                                            element.nextElementSibling().attr("title").
+                                                    substring(41));
+                                }
                                 connectionsListTemp.add(stationTemp + " > " + element.text().substring(1) + " = " +
                                         element.nextElementSibling().attr("title").
                                                 substring(19));
                             } else {
+                                if (line.getElementsByTag("a").attr("title").contains("Кросс-платформенная")) {
+                                    connectionsListTemp.add(stationTemp + " > " + element.text() + " = " + element.nextElementSibling().attr("title").
+                                            substring(41));
+                                }
                                 connectionsListTemp.add(stationTemp + " > " + element.text() + " = " + element.nextElementSibling().attr("title").
                                         substring(19));
                             }
@@ -128,40 +136,18 @@ public class Parser {
             }
 
             for (String string : connectionsList) {
-//                bufer.clear();
+                bufer.clear();
                 for (Line line : metroLines) {
                     if (string.substring(string.indexOf("=") + 1, string.lastIndexOf(">") - 1).trim().equals(line.getNumber())) {
                         for (Station station : line.getStations()) {
                             if (string.substring(0, string.indexOf("=") - 1).trim().equals(station.getName())) {
-                                if (!bufer.isEmpty()) {
-                                    for (Station stationInBufer : bufer) {
-                                        if (station.equals(stationInBufer)) {
-                                            for (Line connectedLine : metroLines) {
-                                                if (string.substring(string.indexOf(">") + 1, string.lastIndexOf("=") - 1).trim().equals(connectedLine.getNumber())) {
-                                                    for (Station connectedStation : connectedLine.getStations()) {
-                                                        if (string.substring(string.lastIndexOf("=") + 1).trim().equals(connectedStation.getName())) {
-                                                            bufer.add(connectedStation);
-                                                            connections.add(new TreeSet<>(bufer));
-                                                            noMatches = false;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            noMatches = true;
-                                        }
-                                    }
-                                }
-                                if (noMatches) {
-                                    bufer.clear();
-                                    bufer.add(station);
-                                    for (Line connectedLine : metroLines) {
-                                        if (string.substring(string.indexOf(">") + 1, string.lastIndexOf("=") - 1).trim().equals(connectedLine.getNumber())) {
-                                            for (Station connectedStation : connectedLine.getStations()) {
-                                                if (string.substring(string.lastIndexOf("=") + 1).trim().equals(connectedStation.getName())) {
-                                                    bufer.add(connectedStation);
-                                                    connections.add(new TreeSet<>(bufer));
-                                                }
+                                bufer.add(station);
+                                for (Line connectedLine : metroLines) {
+                                    if (string.substring(string.indexOf(">") + 1, string.lastIndexOf("=") - 1).trim().equals(connectedLine.getNumber())) {
+                                        for (Station connectedStation : connectedLine.getStations()) {
+                                            if (string.substring(string.lastIndexOf("=") + 1).trim().equals(connectedStation.getName())) {
+                                                bufer.add(connectedStation);
+                                                connectionsTemp.add(new HashSet<>(bufer));
                                             }
                                         }
                                     }
@@ -172,11 +158,19 @@ public class Parser {
                 }
             }
 
-//            for (TreeSet<Station> treeSet : connections) {
-//                for (Station station : treeSet) {
-//
-//                }
-//            }
+            ArrayList<HashSet<Station>> connectionsCopy = new ArrayList<>(connectionsTemp);
+
+            for (HashSet<Station> oldTreeSet : connectionsTemp) {
+                for (Station oldStation : oldTreeSet) {
+                    for (HashSet<Station> newTreeSet : connectionsCopy) {
+                        if (newTreeSet.contains(oldStation)) {
+                            newTreeSet.addAll(oldTreeSet);
+                        }
+                    }
+                }
+            }
+            connections = new HashSet<>(connectionsCopy);
+
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,50 +1,54 @@
 package core;
+import com.google.gson.annotations.SerializedName;
 
-import com.google.gson.annotations.Expose;
+public class Station implements Comparable<Station> {
 
-public class Station implements Comparable<Station>
-{
-    private String line;
-    private transient Line line1;
+    private transient Line line;
     private String name;
+    @SerializedName("line")
+    private String lineNumber;
 
+    public Station(String name, Line line) {
 
-    public Station(String name, Line line1)
-    {
         this.name = name;
-        this.line1 = line1;
-        line = line1.getNumber();
+
+        this.line = line;
+        lineNumber = line.getNumber();
     }
 
-    public Line getLine()
-    {
-        return line1;
+    public Line getLine() {
+        return line;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public int compareTo(Station station)
-    {
-        int lineComparison = line1.compareTo(station.getLine());
-        if(lineComparison != 0) {
+    public int compareTo(Station station) {
+        int lineComparison = line.compareTo(station.getLine());
+        if (lineComparison != 0) {
             return lineComparison;
         }
         return name.compareToIgnoreCase(station.getName());
     }
 
+
+    public void setLine1(Line line1) {
+        this.line = line1;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return compareTo((Station) obj) == 0;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
 }

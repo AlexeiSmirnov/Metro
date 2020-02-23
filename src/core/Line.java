@@ -1,65 +1,61 @@
 package core;
-
-import com.google.gson.annotations.Expose;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Line implements Comparable<Line>
-{
+public class Line implements Comparable<Line> {
+
     private String number;
     private String name;
     private transient List<Station> stations;
-//    private  List<String> stationsNames;
     private String color;
 
-    public Line(String number, String name, String color)
-    {
+    public Line(String number, String name, String color) {
         this.number = number;
         this.name = name;
         this.color = color;
         stations = new ArrayList<>();
-//        stationsNames = new ArrayList<>();
     }
 
-//    public List<String> getStationsNames() {
-//        for (Station station : stations)
-//        {
-//            stationsNames.add(station.getName());
-//        }
-//        return stationsNames;
-//    }
 
-    public String getNumber()
-    {
+    public String getNumber() {
         return number;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void addStation(Station station)
-    {
+    public void addStation(Station station) {
         stations.add(station);
     }
 
-    public List<Station> getStations()
-    {
+    public List<Station> getStations() {
         return stations;
     }
 
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStations(List<Station> stations) {
+        this.stations = stations;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     @Override
-    public int compareTo(Line line)
-    {
+    public int compareTo(Line line) {
         return CharSequence.compare(number, line.getNumber());
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return compareTo((Line) obj) == 0;
     }
 }
